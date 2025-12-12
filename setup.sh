@@ -1,0 +1,1 @@
+echo 'Environment setup complete!'
