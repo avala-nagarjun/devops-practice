@@ -1,0 +1,45 @@
+services:
+  # 1. The Database
+  mongo_db:
+    image: mongo:6.0
+    container_name: devops_db_mongo
+    ports:
+      - "27017:27017" # Optional: Only if you want to use MongoDB Compass locally
+    volumes:
+      - mongo_data:/data/db # Persistence (Week 8 preview)
+
+  # 2. The Backend
+  api:
+    build: ./server
+    container_name: devops_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo_db:27017/devops_app
+    depends_on:
+      - mongo_db
+
+  # 3. The Frontend
+  client:
+    build: ./client
+    container_name: devops_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080/api # Sneak peek at Nginx port
+
+  # ... other services ...
+
+  nginx:
+    image: nginx:alpine
+    container_name: devops_gateway
+    ports:
+      - "8080:80" # We map host 8080 to container 80
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+      - client
+
+volumes:
+  mongo_data:
