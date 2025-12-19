@@ -2,7 +2,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-and-push:
@@ -24,9 +24,9 @@ jobs:
       - name: Build and push Backend
         uses: docker/build-push-action@v5
         with:
-          context:./server
+          context: ./server
           push: true
-          # Note: We use 'latest' for simplicity in this practice, 
+          # Note: We use 'latest' for simplicity in this practice,
           # but usually you use the git SHA (coming in Week 9)
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-backend:latest
 
@@ -34,6 +34,6 @@ jobs:
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
         with:
-          context:./client
+          context: ./client
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-frontend:latest
