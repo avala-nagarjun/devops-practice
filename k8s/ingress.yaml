@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+  # annotations:
+  # We DO NOT use rewrite-target here.
+  # We want the backend to receive the full path "/api/status"
+  # because your Express app is listening on app.get('/api/status')
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: practice.local
+      http:
+        paths:
+          # Route 1: Traffic starting with /api goes to Backend
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: server-srv
+                port:
+                  number: 5000
+          # Route 2: Everything else goes to Frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000
