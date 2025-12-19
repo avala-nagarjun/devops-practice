@@ -21,7 +21,7 @@ app.get("/api/status", (req, res) => {
   res.json({
     message: "Backend is RUNNING",
     timestamp: new Date(),
-    v: "version 2",
+    v: "v1.0.0",
   });
 });
 

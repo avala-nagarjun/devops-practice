@@ -18,15 +18,26 @@ spec:
           image: testing1avala/devops-backend:v1
           env:
             - name: MONGO_URI
-              value: "mongodb://mongo-srv:27017/devops_app"
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets # Name of the secret object
+                  key: MONGO_URI # Key inside the secret
           ports:
             - containerPort: 5000
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: server-srv
 spec:
+  type: NodePort
   selector:
     app: server
   ports:
